@@ -3,10 +3,11 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-let gameLoop; // interval reference
-let dx = 20; // snake movement step in x
-let dy = 0; // snake movement step in y
-let snake; // snake body (array of x,y objects)
+let gameLoop;
+let dx = 20;
+let dy = 0;
+let snake;
+let fruit = { x: 0, y: 0 };
 
 //  Game Initialization
 
@@ -20,9 +21,17 @@ function initSnake() {
   dy = 0;
 }
 
+function spawnFruit() {
+  fruit.x = Math.floor(Math.random() * (canvas.width / 20)) * 20;
+  fruit.y = Math.floor(Math.random() * (canvas.height / 20)) * 20;
+}
+
 function startGame() {
   initSnake();
+  spawnFruit();
   if (gameLoop) clearInterval(gameLoop);
+
+  // Slow snake down (Higher the number, slower the pace)
   gameLoop = setInterval(main, 150);
 }
 
@@ -34,7 +43,9 @@ function resetGame() {
 
 function main() {
   moveSnake();
+  checkFruitCollision();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawFruit();
   drawSnake();
   checkCollision();
 }
@@ -43,12 +54,12 @@ function main() {
 
 function moveSnake() {
   const head = { x: snake[0].x + dx, y: snake[0].y + dy };
-
-  // Add new head
   snake.unshift(head);
 
-  // Remove tail (for now, until we add food/growth)
-  snake.pop();
+  // Only remove tail if not eating fruit
+  if (!(head.x === fruit.x && head.y === fruit.y)) {
+    snake.pop();
+  }
 }
 
 function drawSnake() {
@@ -59,21 +70,63 @@ function drawSnake() {
       ctx.fillStyle = "green";
       ctx.fillRect(part.x, part.y, 22, 22); // bigger head
 
-      // Eyes 👀
+      // Eyes (rotate with direction)
       ctx.fillStyle = "black";
-      ctx.fillRect(part.x + 4, part.y + 4, 4, 4); // left eye
-      ctx.fillRect(part.x + 14, part.y + 4, 4, 4); // right eye
+      if (dx > 0) {
+        // Right
+        ctx.fillRect(part.x + 14, part.y + 4, 4, 4);
+        ctx.fillRect(part.x + 14, part.y + 14, 4, 4);
+      } else if (dx < 0) {
+        // Left
+        ctx.fillRect(part.x + 4, part.y + 4, 4, 4);
+        ctx.fillRect(part.x + 4, part.y + 14, 4, 4);
+      } else if (dy < 0) {
+        // Up
+        ctx.fillRect(part.x + 4, part.y + 4, 4, 4);
+        ctx.fillRect(part.x + 14, part.y + 4, 4, 4);
+      } else if (dy > 0) {
+        // Down
+        ctx.fillRect(part.x + 4, part.y + 14, 4, 4);
+        ctx.fillRect(part.x + 14, part.y + 14, 4, 4);
+      }
     } else {
       // Snake Body
 
-      ctx.fillStyle = "light-green";
-      ctx.fillRect(part.x + 1, part.y + 1, 18, 18); // spacing makes it "segmented"
+      ctx.fillStyle = "lightgreen";
+      ctx.fillRect(part.x + 1, part.y + 1, 18, 18); // Spaced for segmentation
 
-      // Optional border
-      ctx.strokeStyle = "dark-green";
+      ctx.strokeStyle = "darkgreen";
       ctx.strokeRect(part.x + 1, part.y + 1, 18, 18);
     }
   });
+}
+
+//  Fruit (Apple)
+
+function drawFruit() {
+  // Apple body (circle)
+  ctx.fillStyle = "red";
+  ctx.beginPath();
+  ctx.arc(fruit.x + 10, fruit.y + 10, 10, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Stem
+  ctx.fillStyle = "brown";
+  ctx.fillRect(fruit.x + 8, fruit.y - 4, 4, 6);
+
+  // Leaf
+  ctx.fillStyle = "green";
+  ctx.beginPath();
+  ctx.ellipse(fruit.x + 14, fruit.y - 2, 4, 2, 0, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function checkFruitCollision() {
+  const head = snake[0];
+  if (head.x === fruit.x && head.y === fruit.y) {
+    // Grow snake
+    spawnFruit();
+  }
 }
 
 //  Input Handling
@@ -126,11 +179,7 @@ function gameOver() {
   alert("Game Over! Click Restart to play again.");
 }
 
-// Start Button
+//  Buttons
 
 document.getElementById("startBtn").addEventListener("click", startGame);
-//  Restart Button
-
 document.getElementById("restartBtn").addEventListener("click", resetGame);
-
-//  Start First Game
