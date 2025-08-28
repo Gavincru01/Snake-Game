@@ -1,0 +1,14 @@
+canvas {
+  border: 1px solid black;
+}
+.gameTitle {
+  text-align: center;
+}
+.gameBoard {
+  display: flex;
+  justify-content: center;
+}
+.gameBtns {
+  justify-content: center;
+  text-align: center;
+}

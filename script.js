@@ -10,23 +10,24 @@ let snake; // snake body (array of x,y objects)
 
 //  Game Initialization
 
-function resetGame() {
-  // Reset snake to starting position
+function initSnake() {
   snake = [
     { x: 50, y: 50 },
     { x: 30, y: 50 },
     { x: 10, y: 50 },
   ];
-
-  // Reset direction
   dx = 20;
   dy = 0;
+}
 
-  // Clear old game loop if it exists
+function startGame() {
+  initSnake();
   if (gameLoop) clearInterval(gameLoop);
+  gameLoop = setInterval(main, 150);
+}
 
-  // Start a new game loop
-  gameLoop = setInterval(main, 100);
+function resetGame() {
+  startGame();
 }
 
 //  Core Loop
@@ -51,9 +52,27 @@ function moveSnake() {
 }
 
 function drawSnake() {
-  ctx.fillStyle = "green";
-  snake.forEach((part) => {
-    ctx.fillRect(part.x, part.y, 20, 20);
+  snake.forEach((part, index) => {
+    if (index === 0) {
+      // Snake Head
+
+      ctx.fillStyle = "green";
+      ctx.fillRect(part.x, part.y, 22, 22); // bigger head
+
+      // Eyes 👀
+      ctx.fillStyle = "black";
+      ctx.fillRect(part.x + 4, part.y + 4, 4, 4); // left eye
+      ctx.fillRect(part.x + 14, part.y + 4, 4, 4); // right eye
+    } else {
+      // Snake Body
+
+      ctx.fillStyle = "light-green";
+      ctx.fillRect(part.x + 1, part.y + 1, 18, 18); // spacing makes it "segmented"
+
+      // Optional border
+      ctx.strokeStyle = "dark-green";
+      ctx.strokeRect(part.x + 1, part.y + 1, 18, 18);
+    }
   });
 }
 
@@ -107,10 +126,11 @@ function gameOver() {
   alert("Game Over! Click Restart to play again.");
 }
 
+// Start Button
+
+document.getElementById("startBtn").addEventListener("click", startGame);
 //  Restart Button
 
 document.getElementById("restartBtn").addEventListener("click", resetGame);
 
 //  Start First Game
-
-resetGame();
