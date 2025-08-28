@@ -2,34 +2,43 @@
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const cellSize = 20;
 
 let gameLoop;
-let dx = 20;
+let dx = cellSize;
 let dy = 0;
 let snake;
+let score = 0;
+let highScore = 0;
 let fruit = { x: 0, y: 0 };
 
 //  Game Initialization
 
 function initSnake() {
+  const startX = Math.floor(canvas.width / 2 / cellSize) * cellSize;
+  const startY = Math.floor(canvas.height / 2 / cellSize) * cellSize;
+
   snake = [
-    { x: 50, y: 50 },
-    { x: 30, y: 50 },
-    { x: 10, y: 50 },
+    { x: startX, y: startY },
+    { x: startX - cellSize, y: startY },
+    { x: startX - cellSize * 2, y: startY },
   ];
-  dx = 20;
+
+  dx = cellSize;
   dy = 0;
 }
 
 function spawnFruit() {
-  fruit.x = Math.floor(Math.random() * (canvas.width / 20)) * 20;
-  fruit.y = Math.floor(Math.random() * (canvas.height / 20)) * 20;
+  fruit.x = Math.floor(Math.random() * (canvas.width / cellSize)) * cellSize;
+  fruit.y = Math.floor(Math.random() * (canvas.height / cellSize)) * cellSize;
 }
 
 function startGame() {
   initSnake();
   spawnFruit();
   if (gameLoop) clearInterval(gameLoop);
+  score = 0;
+  document.getElementById("score").textContent = "Score: " + score;
 
   // Slow snake down (Higher the number, slower the pace)
   gameLoop = setInterval(main, 150);
@@ -43,21 +52,34 @@ function resetGame() {
 
 function main() {
   moveSnake();
-  checkFruitCollision();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawGrid();
   drawFruit();
   drawSnake();
   checkCollision();
+
+  // Display Score
+  document.getElementById("score").textContent = "Score: " + score;
+  document.getElementById("highScore").textContent = "High Score: " + highScore;
 }
 
 //  Snake Behavior
 
 function moveSnake() {
+  // Create new head in the direction of movement
   const head = { x: snake[0].x + dx, y: snake[0].y + dy };
   snake.unshift(head);
 
-  // Only remove tail if not eating fruit
-  if (!(head.x === fruit.x && head.y === fruit.y)) {
+  // Check fruit collision
+  if (head.x === fruit.x && head.y === fruit.y) {
+    spawnFruit(); // new fruit
+    score++; // increase score
+
+    // Update high score if beaten
+    if (score > highScore) {
+      highScore = score;
+    }
+  } else {
     snake.pop();
   }
 }
@@ -67,36 +89,97 @@ function drawSnake() {
     if (index === 0) {
       // Snake Head
 
-      ctx.fillStyle = "green";
-      ctx.fillRect(part.x, part.y, 22, 22); // bigger head
+      const gradient = ctx.createLinearGradient(
+        part.x,
+        part.y,
+        part.x + cellSize,
+        part.y + cellSize
+      );
+      gradient.addColorStop(0, "#39ff14"); // neon green start
+      gradient.addColorStop(1, "#00b300"); // deeper green end
 
-      // Eyes (rotate with direction)
+      ctx.fillStyle = gradient;
+      ctx.fillRect(part.x, part.y, cellSize, cellSize);
+
+      // Head glow (subtle outline)
+      ctx.strokeStyle = "lime";
+      ctx.shadowColor = "#39ff14";
+      ctx.shadowBlur = 10;
+      ctx.strokeRect(part.x, part.y, cellSize, cellSize);
+      ctx.shadowBlur = 0; // reset
+
+      // Eyes
+
       ctx.fillStyle = "black";
+      const eyeSize = Math.floor(cellSize / 5);
       if (dx > 0) {
         // Right
-        ctx.fillRect(part.x + 14, part.y + 4, 4, 4);
-        ctx.fillRect(part.x + 14, part.y + 14, 4, 4);
+        ctx.fillRect(
+          part.x + cellSize - eyeSize * 2,
+          part.y + eyeSize,
+          eyeSize,
+          eyeSize
+        );
+        ctx.fillRect(
+          part.x + cellSize - eyeSize * 2,
+          part.y + cellSize - eyeSize * 2,
+          eyeSize,
+          eyeSize
+        );
       } else if (dx < 0) {
         // Left
-        ctx.fillRect(part.x + 4, part.y + 4, 4, 4);
-        ctx.fillRect(part.x + 4, part.y + 14, 4, 4);
+        ctx.fillRect(part.x + eyeSize, part.y + eyeSize, eyeSize, eyeSize);
+        ctx.fillRect(
+          part.x + eyeSize,
+          part.y + cellSize - eyeSize * 2,
+          eyeSize,
+          eyeSize
+        );
       } else if (dy < 0) {
         // Up
-        ctx.fillRect(part.x + 4, part.y + 4, 4, 4);
-        ctx.fillRect(part.x + 14, part.y + 4, 4, 4);
+        ctx.fillRect(part.x + eyeSize, part.y + eyeSize, eyeSize, eyeSize);
+        ctx.fillRect(
+          part.x + cellSize - eyeSize * 2,
+          part.y + eyeSize,
+          eyeSize,
+          eyeSize
+        );
       } else if (dy > 0) {
         // Down
-        ctx.fillRect(part.x + 4, part.y + 14, 4, 4);
-        ctx.fillRect(part.x + 14, part.y + 14, 4, 4);
+        ctx.fillRect(
+          part.x + eyeSize,
+          part.y + cellSize - eyeSize * 2,
+          eyeSize,
+          eyeSize
+        );
+        ctx.fillRect(
+          part.x + cellSize - eyeSize * 2,
+          part.y + cellSize - eyeSize * 2,
+          eyeSize,
+          eyeSize
+        );
       }
     } else {
       // Snake Body
 
-      ctx.fillStyle = "lightgreen";
-      ctx.fillRect(part.x + 1, part.y + 1, 18, 18); // Spaced for segmentation
+      const gradient = ctx.createLinearGradient(
+        part.x,
+        part.y,
+        part.x + cellSize,
+        part.y + cellSize
+      );
+      gradient.addColorStop(0, "#76ff7a"); // lighter neon
+      gradient.addColorStop(1, "#39ff14"); // bright neon
 
-      ctx.strokeStyle = "darkgreen";
-      ctx.strokeRect(part.x + 1, part.y + 1, 18, 18);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(part.x + 1, part.y + 1, cellSize - 2, cellSize - 2);
+
+      // Body border glow
+      ctx.strokeStyle = "#00ff7f";
+      ctx.shadowColor = "#39ff14";
+      ctx.shadowBlur = 8;
+      ctx.strokeRect(part.x + 1, part.y + 1, cellSize - 2, cellSize - 2);
+      ctx.shadowBlur = 0; // reset
     }
   });
 }
@@ -104,29 +187,41 @@ function drawSnake() {
 //  Fruit (Apple)
 
 function drawFruit() {
-  // Apple body (circle)
   ctx.fillStyle = "red";
-  ctx.beginPath();
-  ctx.arc(fruit.x + 10, fruit.y + 10, 10, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Stem
-  ctx.fillStyle = "brown";
-  ctx.fillRect(fruit.x + 8, fruit.y - 4, 4, 6);
-
-  // Leaf
-  ctx.fillStyle = "green";
-  ctx.beginPath();
-  ctx.ellipse(fruit.x + 14, fruit.y - 2, 4, 2, 0, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.fillRect(fruit.x, fruit.y, cellSize, cellSize);
 }
 
 function checkFruitCollision() {
   const head = snake[0];
   if (head.x === fruit.x && head.y === fruit.y) {
-    // Grow snake
     spawnFruit();
+    // Snake grows: don't remove tail on next move
+    snake.push({});
   }
+}
+
+// Grid
+
+function drawGrid() {
+  ctx.strokeStyle = "rgba(57, 255, 20, 0.15)"; // faint neon green
+  ctx.shadowColor = "#39ff14";
+  ctx.shadowBlur = 6;
+
+  for (let x = 0; x <= canvas.width; x += cellSize) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.stroke();
+  }
+
+  for (let y = 0; y <= canvas.height; y += cellSize) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.stroke();
+  }
+
+  ctx.shadowBlur = 0; // reset so snake/fruit aren’t glowing too much
 }
 
 //  Input Handling
