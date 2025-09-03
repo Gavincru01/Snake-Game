@@ -1,0 +1,37 @@
+<div class="pong-page">
+  <div class="arcade-background"></div>
+
+  <div class="arcade-cabinet">
+    <div class="marquee">
+      <h1>🏓 Pong</h1>
+    </div>
+
+    <div class="scoreboard">
+      <span id="playerScore">Player: 0</span>
+      <span id="aiScore">AI: 0</span>
+    </div>
+
+    <div class="gameBoard">
+      <canvas #pongCanvas width="800" height="600"></canvas>
+
+      <div class="game-over-overlay" id="gameOverOverlay">
+        <h2>Game Over</h2>
+        <button (click)="resetGame()">Restart</button>
+        <button [routerLink]="['/']">Back to Hub</button>
+      </div>
+    </div>
+
+    <div class="controls-bar">
+      <select id="difficulty" (change)="setDifficulty($event)">
+        <option value="3">Easy</option>
+        <option value="5" selected>Medium</option>
+        <option value="8">Hard</option>
+      </select>
+
+      <button class="start-btn" (click)="startGame()">Start</button>
+      <button class="restart-btn" (click)="resetGame()">Restart</button>
+      <button class="pause-btn" (click)="togglePause()">Pause</button>
+      <button class="back-btn" [routerLink]="['/']">Back to Hub</button>
+    </div>
+  </div>
+</div>
