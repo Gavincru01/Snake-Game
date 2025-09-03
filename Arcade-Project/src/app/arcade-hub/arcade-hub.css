@@ -1,71 +1,129 @@
-.hub-container {
+.arcade-header {
   text-align: center;
-  padding: 40px;
-  font-family: 'Press Start 2P', sans-serif;
+  margin-bottom: 40px;
   color: #39ff14;
-  background-color: #0a0f24;
-  min-height: 100vh;
+  text-shadow: 0 0 12px #39ff14;
+
+  width: 100%;
+  max-width: 1000px;
+  padding: 20px;
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(57, 255, 20, 0.3);
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+
+  /* 🔥 neon pulse animation */
+  animation: neonPulseHeader 3s infinite ease-in-out;
 }
 
-.hub-title {
+@keyframes neonPulseHeader {
+  0% {
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.4), 0 0 25px rgba(57, 255, 20, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(57, 255, 20, 0.7), 0 0 40px rgba(57, 255, 20, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.4), 0 0 25px rgba(57, 255, 20, 0.2);
+  }
+}
+
+.arcade-header h1 {
   font-size: 48px;
   margin-bottom: 10px;
-  text-shadow: 0 0 12px #39ff14;
 }
 
-.hub-subtitle {
-  margin-bottom: 40px;
+.arcade-header p {
+  font-size: 16px;
   color: #eee;
+  text-shadow: 0 0 6px #39ff14;
+  animation: flicker 2.5s infinite;
 }
 
-.hub-grid {
+@keyframes flicker {
+  0%,
+  18%,
+  22%,
+  25%,
+  53%,
+  57%,
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 6px #39ff14, 0 0 12px #39ff14;
+  }
+  20%,
+  24%,
+  55% {
+    opacity: 0.4;
+    text-shadow: none;
+  }
+}
+
+.arcade-wrapper {
+  position: fixed; /* lock to screen */
+  top: 0;
+  left: 0;
+  height: 100vh; /* full viewport height */
+  width: 100vw; /* full viewport width */
+
   display: flex;
-  justify-content: center;
-  gap: 40px;
-  flex-wrap: wrap;
+  flex-direction: column; /* stack header + grid */
+  align-items: center; /* center horizontally */
+  justify-content: flex-start; /* push content to the top */
+
+  padding-top: 60px; /* breathing room */
+  overflow: hidden; /* 🚫 no scrollbars */
+  font-family: 'Press Start 2P', sans-serif;
+  background: radial-gradient(circle at center, #0f172a 0%, #0a0f24 100%);
 }
 
-.game-card {
-  width: 250px;
-  height: 350px;
-  padding: 20px;
-  border-radius: 16px;
-  border: 1px solid rgba(57, 255, 20, 0.3);
+/* Layout for the grid of game cards */
+.arcade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
 
+  width: 100%;
+  max-width: 1000px; /* 🔒 grid doesn’t stretch too wide */
+  margin: 0 auto; /* center horizontally */
+  justify-items: center; /* keep cards centered within each grid cell */
+}
+
+/* Individual game card */
+.game-card {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-
+  border: 1px solid rgba(57, 255, 20, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  color: #39ff14;
   box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .game-card:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
   box-shadow: 0 0 30px rgba(57, 255, 20, 0.6);
 }
 
-.game-card h2 {
-  font-size: 18px;
+/* Game preview image */
+.game-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 12px;
   margin-bottom: 15px;
-  color: #39ff14;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
 }
 
-.game-card p {
-  font-size: 12px;
-  color: #ddd;
-  margin-bottom: 20px;
-}
-
+/* Card button */
 .game-card button {
-  border-radius: 8px;
   border: none;
-  padding: 12px 20px;
+  border-radius: 8px;
+  padding: 10px 20px;
   font-size: 12px;
   font-family: 'Press Start 2P', sans-serif;
   cursor: pointer;
@@ -75,25 +133,47 @@
   transition: all 0.2s ease-in-out;
 }
 
-.game-card button:hover:enabled {
+.game-card button:hover {
   background-color: #2ecc10;
   box-shadow: 0 0 15px rgba(57, 255, 20, 1);
 }
 
-.game-card.disabled {
-  opacity: 0.5;
-  pointer-events: none;
+.game-card button[disabled] {
+  background-color: #333;
+  color: #888;
+  cursor: not-allowed;
+  box-shadow: none;
+  animation: flicker 3s infinite; /* reuse CRT flicker */
 }
 
-.game-card.selected img {
-  box-shadow: 0 0 20px rgba(57, 255, 20, 0.9);
-  transform: scale(1.02);
-  transition: all 0.2s ease-in-out;
+.game-card button[disabled]:hover {
+  background-color: #333; /* no hover effect */
+  box-shadow: none;
 }
-.game-card img {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 15px;
+
+.game-card.locked {
+  position: relative;
+  overflow: hidden;
+}
+
+.game-card.locked::after {
+  content: 'OUT OF ORDER';
+  position: absolute;
+  top: 20px;
+  left: -60px; /* shift left more */
+  transform: rotate(-20deg);
+  width: 160%; /* 👈 span wider than the card */
+  text-align: center;
+
+  background: rgba(255, 0, 0, 0.85);
+  color: #fff;
+  font-size: 14px;
+  font-family: 'Press Start 2P', sans-serif;
+  padding: 6px 0;
+
+  text-shadow: 0 0 6px #ff0000;
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.7);
+
+  animation: flicker 2.5s infinite;
+  pointer-events: none; /* make sure it doesn’t block clicks */
 }

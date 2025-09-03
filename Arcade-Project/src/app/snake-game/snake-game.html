@@ -1,34 +1,44 @@
-<div class="snake-wrapper">
-  <div class="snake-card">
-    <h1 class="snake-title">🐍 Snake Game</h1>
-    <h2 id="score">Score: 0</h2>
-    <h3 id="highScore">High Score: 0</h3>
+<div class="snake-page">
+  <!-- animated background grid -->
+  <div class="arcade-background"></div>
 
-    <div class="gameBtns">
-      <!-- Difficulty selector -->
+  <div class="arcade-cabinet">
+    <!-- marquee title -->
+    <div class="marquee">
+      <h1>🐍 Snake Game</h1>
+    </div>
+
+    <!-- score display -->
+    <div class="scoreboard">
+      <span id="score">Score: 0</span>
+      <span id="highScore">High Score: 0</span>
+    </div>
+
+    <!-- game screen -->
+    <div class="gameBoard">
+      <canvas #gameCanvas width="800" height="600"></canvas>
+
+      <!-- game over popup -->
+      <div class="game-over-overlay" id="gameOverOverlay">
+        <h2>💀 GAME OVER 💀</h2>
+        <p id="finalScore">Score: 0</p>
+        <button (click)="resetGame()">Restart</button>
+        <button [routerLink]="['/']">Back to Hub</button>
+      </div>
+    </div>
+
+    <!-- controls -->
+    <div class="controls-bar">
       <select id="difficulty" (change)="setDifficulty($event)">
         <option value="150">Easy</option>
         <option value="100" selected>Medium</option>
         <option value="60">Hard</option>
       </select>
 
-      <!-- Buttons -->
-      <button (click)="startGame()">Start</button>
-      <button (click)="resetGame()">Restart</button>
-      <button (click)="togglePause()">Pause</button>
-      <button routerLink="/">Back to Hub</button>
-    </div>
-
-    <div class="gameBoard">
-      <canvas #gameCanvas width="800" height="600"></canvas>
-
-      <!-- Neon Game Over Overlay -->
-      <div class="game-over-overlay" id="gameOverOverlay">
-        <h2>💀 Game Over 💀</h2>
-        <p id="finalScore">Score: 0</p>
-        <button (click)="resetGame()">Restart</button>
-        <button routerLink="/">Back to Hub</button>
-      </div>
+      <button class="start-btn" (click)="startGame()">Start</button>
+      <button class="restart-btn" (click)="resetGame()">Restart</button>
+      <button class="pause-btn" (click)="togglePause()">Pause</button>
+      <button class="back-btn" [routerLink]="['/']">Back to Hub</button>
     </div>
   </div>
 </div>
