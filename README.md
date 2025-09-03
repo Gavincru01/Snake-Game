@@ -7,7 +7,7 @@ Each game opens inside its own “arcade cabinet” with a neon theme.
 
 ### 🐍 Snake
 
-![Snake Game Screenshot](./assets/snake-preview.png)
+![Snake Game Screenshot](/Arcade-Project/src/assets/images/snake-preview.png)
 
 - Classic snake that grows as you eat fruit
 - Difficulty selector (**Easy / Medium / Hard**)
@@ -16,7 +16,7 @@ Each game opens inside its own “arcade cabinet” with a neon theme.
 
 ### 🏓 Pong
 
-![Pong Game Screenshot](./assets/pong-preview.png)
+![Pong Game Screenshot](/Arcade-Project/src/assets/images/pong-preview.png)
 
 - Player vs. AI paddle match
 - Difficulty dropdown (affects win condition / challenge)
