@@ -1,9 +1,9 @@
 .snake-wrapper {
-  position: fixed; /* 🔥 lock wrapper to viewport */
+  position: absolute; /* 🟢 stays pinned but doesn’t break flow */
   top: 0;
   left: 0;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,6 +20,7 @@
   padding: 30px;
   width: 900px;
   max-width: 95%;
+
   text-align: center;
   color: #39ff14;
 

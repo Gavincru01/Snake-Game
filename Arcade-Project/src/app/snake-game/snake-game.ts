@@ -15,7 +15,7 @@ export class SnakeGameComponent implements AfterViewInit {
   difficulty = 100; // default Medium
 
   ngAfterViewInit() {
-    // Initialize the Snake engine with the canvas
+    console.log('Canvas element:', this.gameCanvas);
     this.game = new SnakeGame(this.gameCanvas.nativeElement);
   }
 
