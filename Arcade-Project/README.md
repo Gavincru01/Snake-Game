@@ -1,59 +1,59 @@
-## Arcade Hub
+# ArcadeProject
 
-Arcade Hub is a web app I’m building with Angular that brings together classic-style games in one place.
-Each game opens inside its own “arcade cabinet” with a neon theme.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.0.
 
-## Current Games
+## Development server
 
-Snake Game – the classic snake that grows as you eat fruit.
-
-Difficulty selector (Easy / Medium / Hard)
-
-High score saving
-
-Neon arcade cabinet UI
-
-## Planned Games
-
-Tetris
-
-Pong
-
-## Tech Stack
-
-Angular (standalone components)
-
-TypeScript
-
-HTML Canvas API
-
-CSS for styling (neon arcade look)
-
-## Run it locally
+To start a local development server, run:
 
 ```bash
-git clone https://github.com/yourusername/arcade-hub.git
-cd arcade-hub
-npm install
 ng serve
 ```
 
-## Features of the Hub
+Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-Central “Arcade Hub” screen where you can pick a game
+## Code scaffolding
 
-Each game is displayed in its own styled cabinet
+Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
-Responsive layout (works on smaller screens too)
+```bash
+ng generate component component-name
+```
 
-Easy to expand: new games can be added as components
+For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
 
-## Future Plans
+```bash
+ng generate --help
+```
 
-Add more games
+## Building
 
-Add sound effects and background music
+To build the project run:
 
-Global leaderboard system
+```bash
+ng build
+```
 
-Themes (different cabinet styles)
+This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+
+## Running unit tests
+
+To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+
+```bash
+ng test
+```
+
+## Running end-to-end tests
+
+For end-to-end (e2e) testing, run:
+
+```bash
+ng e2e
+```
+
+Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+
+## Additional Resources
+
+For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
