@@ -16,16 +16,17 @@
 
       <div class="game-over-overlay" id="gameOverOverlay">
         <h2>Game Over</h2>
-        <button (click)="resetGame()">Restart</button>
+        <p id="finalScore">Player 0 - 0 AI</p>
         <button [routerLink]="['/']">Back to Hub</button>
+        <button (click)="closeOverlay()">Close</button>
       </div>
     </div>
 
     <div class="controls-bar">
-      <select id="difficulty" (change)="setDifficulty($event)">
-        <option value="3">Easy</option>
-        <option value="5" selected>Medium</option>
-        <option value="8">Hard</option>
+      <select id="winningScore" (change)="setWinningScore($event)">
+        <option value="3">First to 3</option>
+        <option value="5" selected>First to 5</option>
+        <option value="10">First to 10</option>
       </select>
 
       <button class="start-btn" (click)="startGame()">Start</button>

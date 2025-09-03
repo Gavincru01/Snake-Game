@@ -15,26 +15,41 @@ export class PongGameComponent implements AfterViewInit {
   @ViewChild('pongCanvas', { static: false })
   pongCanvas!: ElementRef<HTMLCanvasElement>;
 
-  difficulty = 5; // paddle speed or AI difficulty
+  winningScore = 5; // default win condition
 
   ngAfterViewInit() {
-    this.game = new PongGame(this.pongCanvas.nativeElement);
+    if (this.pongCanvas?.nativeElement) {
+      this.game = new PongGame(this.pongCanvas.nativeElement);
+    }
+  }
+
+  setWinningScore(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.winningScore = parseInt(value, 10);
   }
 
   startGame() {
-    this.game?.startGame(this.difficulty);
+    if (this.game) {
+      this.game.startGame(this.winningScore);
+    }
   }
 
   resetGame() {
-    this.game?.startGame(this.difficulty);
+    if (this.game) {
+      this.game.startGame(this.winningScore);
+    }
   }
 
   togglePause() {
-    this.game?.togglePause();
+    if (this.game) {
+      this.game.togglePause();
+    }
   }
 
-  setDifficulty(event: Event) {
-    const value = (event.target as HTMLSelectElement).value;
-    this.difficulty = parseInt(value, 10);
+  closeOverlay() {
+    const overlay = document.getElementById('gameOverOverlay') as HTMLElement;
+    if (overlay) {
+      overlay.style.display = 'none';
+    }
   }
 }

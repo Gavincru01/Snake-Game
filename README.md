@@ -13,11 +13,19 @@ High score saving
 
 Neon arcade cabinet UI
 
+Pong - Player vs. AI paddle match
+
+Difficulty dropdown (affects win condition / challenge)
+
+First to reach the winning score wins
+
+Neon arcade cabinet style with custom color palette
+
 ## Planned Games
 
 Tetris
 
-Pong
+More arcade classics to come...
 
 ## Tech Stack
 
