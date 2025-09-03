@@ -5,21 +5,23 @@ Each game opens inside its own “arcade cabinet” with a neon theme.
 
 ## Current Games
 
-Snake Game – the classic snake that grows as you eat fruit.
+### 🐍 Snake
 
-Difficulty selector (Easy / Medium / Hard)
+![Snake Game Screenshot](./assets/snake-preview.png)
 
-High score saving
+- Classic snake that grows as you eat fruit
+- Difficulty selector (**Easy / Medium / Hard**)
+- Local **high score saving**
+- Neon grid + arcade cabinet UI
 
-Neon arcade cabinet UI
+### 🏓 Pong
 
-Pong - Player vs. AI paddle match
+![Pong Game Screenshot](./assets/pong-preview.png)
 
-Difficulty dropdown (affects win condition / challenge)
-
-First to reach the winning score wins
-
-Neon arcade cabinet style with custom color palette
+- Player vs. AI paddle match
+- Difficulty dropdown (affects win condition / challenge)
+- First to reach the winning score wins
+- Neon arcade cabinet style with custom color palette
 
 ## Planned Games
 
