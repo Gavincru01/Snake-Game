@@ -1,0 +1,34 @@
+<div class="snake-wrapper">
+  <div class="snake-card">
+    <h1 class="snake-title">🐍 Snake Game</h1>
+    <h2 id="score">Score: 0</h2>
+    <h3 id="highScore">High Score: 0</h3>
+
+    <div class="gameBtns">
+      <!-- Difficulty selector -->
+      <select id="difficulty" (change)="setDifficulty($event)">
+        <option value="150">Easy</option>
+        <option value="100" selected>Medium</option>
+        <option value="60">Hard</option>
+      </select>
+
+      <!-- Buttons -->
+      <button (click)="startGame()">Start</button>
+      <button (click)="resetGame()">Restart</button>
+      <button (click)="togglePause()">Pause</button>
+      <button routerLink="/">Back to Hub</button>
+    </div>
+
+    <div class="gameBoard">
+      <canvas #gameCanvas width="800" height="600"></canvas>
+
+      <!-- Neon Game Over Overlay -->
+      <div class="game-over-overlay" id="gameOverOverlay">
+        <h2>💀 Game Over 💀</h2>
+        <p id="finalScore">Score: 0</p>
+        <button (click)="resetGame()">Restart</button>
+        <button routerLink="/">Back to Hub</button>
+      </div>
+    </div>
+  </div>
+</div>
